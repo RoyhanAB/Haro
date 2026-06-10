@@ -79,7 +79,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             color: AppColors.highlight,
             child: Row(
               children: [
-                const HaroAvatar(size: 44, accessory: '💬'),
+                const HaroAvatar(size: 44, mood: HaroMoodVisual.happy),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(

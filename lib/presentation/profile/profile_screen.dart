@@ -4,7 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/utils/money_formatter.dart';
 import '../../domain/models/user_profile.dart';
 import '../../state/app_providers.dart';
-import '../budget/budget_section.dart';
+import '../achievements/achievements_screen.dart';
+import '../budget/budget_screen.dart';
 import '../common/app_button.dart';
 import '../common/app_card.dart';
 import '../common/app_screen.dart';
@@ -23,7 +24,7 @@ class ProfileScreen extends ConsumerWidget {
         children: [
           Row(
             children: [
-              const HaroAvatar(size: 64, accessory: '⚙️'),
+              const HaroAvatar(size: 72, mood: HaroMoodVisual.proud),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -34,7 +35,7 @@ class ProfileScreen extends ConsumerWidget {
                       style: Theme.of(context).textTheme.headlineSmall
                           ?.copyWith(fontWeight: FontWeight.w900),
                     ),
-                    Text('Currency: ${profile.currency}'),
+                    Text(profile.email ?? 'Data lokal HARO'),
                   ],
                 ),
               ),
@@ -49,27 +50,73 @@ class ProfileScreen extends ConsumerWidget {
           AppCard(
             child: Column(
               children: [
+                const _SettingRow('HARO Pro', 'Buka insight lebih pintar'),
                 _SettingRow('Budget bulanan', formatIDR(profile.monthlyBudget)),
                 _SettingRow(
-                  'Pemasukan bulanan',
+                  'Pemasukan rutin',
                   formatIDR(profile.monthlyIncome ?? 0),
                 ),
-                _SettingRow('Gaya bicara Haro', profile.HaroTone.name),
+                _SettingRow(
+                  'Tanggal gajian',
+                  profile.payday?.toString() ?? '-',
+                ),
+                _SettingRow('Gaya bicara Haro', profile.haroTone.name),
                 const _SettingRow('Kategori transaksi', 'Default MVP'),
                 const _SettingRow('Notifikasi anti kalap', 'Belum aktif'),
                 const _SettingRow('Export data', 'Segera hadir'),
+                const _SettingRow('Backup & sinkronisasi', 'TODO cloud sync'),
                 const _SettingRow('Privasi & keamanan', 'Data tersimpan lokal'),
+                const _SettingRow('Pusat bantuan', 'Segera hadir'),
               ],
             ),
           ),
           const SizedBox(height: 16),
-          BudgetSection(profile: profile, transactions: state.transactions),
-          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: AppButton(
+                  label: 'Budget',
+                  icon: Icons.account_balance_wallet,
+                  isSecondary: true,
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const BudgetScreen()),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: AppButton(
+                  label: 'Pencapaian',
+                  icon: Icons.emoji_events,
+                  isSecondary: true,
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const AchievementsScreen(),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          AppButton(
+            label: 'Keluar',
+            icon: Icons.logout,
+            isSecondary: true,
+            onPressed: () => ref.read(appStateProvider.notifier).logout(),
+          ),
+          const SizedBox(height: 8),
           AppButton(
             label: 'Hapus semua data lokal',
             icon: Icons.delete_outline,
             isSecondary: true,
             onPressed: () => _clearData(context, ref),
+          ),
+          const SizedBox(height: 16),
+          const Center(
+            child: Text('Aku bantu catat, kamu tetap pegang kendali.'),
           ),
         ],
       ),
@@ -88,7 +135,7 @@ class ProfileScreen extends ConsumerWidget {
     final income = TextEditingController(
       text: (profile.monthlyIncome ?? 0).toString(),
     );
-    var tone = profile.HaroTone;
+    var tone = profile.haroTone;
     final updated = await showModalBottomSheet<UserProfile>(
       context: context,
       isScrollControlled: true,
@@ -127,14 +174,8 @@ class ProfileScreen extends ConsumerWidget {
               SegmentedButton<HaroTone>(
                 segments: const [
                   ButtonSegment(value: HaroTone.lucu, label: Text('Lucu')),
-                  ButtonSegment(
-                    value: HaroTone.santai,
-                    label: Text('Santai'),
-                  ),
-                  ButtonSegment(
-                    value: HaroTone.tegas,
-                    label: Text('Tegas'),
-                  ),
+                  ButtonSegment(value: HaroTone.santai, label: Text('Santai')),
+                  ButtonSegment(value: HaroTone.tegas, label: Text('Tegas')),
                 ],
                 selected: {tone},
                 onSelectionChanged: (value) =>
@@ -151,7 +192,7 @@ class ProfileScreen extends ConsumerWidget {
                         : name.text.trim(),
                     monthlyBudget: parseIDRText(budget.text) ?? 0,
                     monthlyIncome: parseIDRText(income.text),
-                    HaroTone: tone,
+                    haroTone: tone,
                   ),
                 ),
               ),
@@ -163,8 +204,9 @@ class ProfileScreen extends ConsumerWidget {
     name.dispose();
     budget.dispose();
     income.dispose();
-    if (updated != null)
+    if (updated != null) {
       ref.read(appStateProvider.notifier).updateProfile(updated);
+    }
   }
 
   Future<void> _clearData(BuildContext context, WidgetRef ref) async {
@@ -173,7 +215,7 @@ class ProfileScreen extends ConsumerWidget {
       builder: (context) => AlertDialog(
         title: const Text('Hapus semua data lokal?'),
         content: const Text(
-          'Profil dan transaksi akan dihapus dari perangkat ini.',
+          'Profil, akun, dan transaksi akan dihapus dari perangkat ini.',
         ),
         actions: [
           TextButton(
@@ -187,7 +229,9 @@ class ProfileScreen extends ConsumerWidget {
         ],
       ),
     );
-    if (confirmed == true) ref.read(appStateProvider.notifier).clearAllData();
+    if (confirmed == true) {
+      ref.read(appStateProvider.notifier).clearAllData();
+    }
   }
 }
 

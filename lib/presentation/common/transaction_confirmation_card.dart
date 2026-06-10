@@ -30,8 +30,9 @@ class TransactionConfirmationCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const Text('🐱📋', style: TextStyle(fontSize: 28)),
           Text(
-            'Cek dulu sebelum disimpan',
+            'Cek dulu ya',
             style: Theme.of(
               context,
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900),
@@ -47,17 +48,31 @@ class TransactionConfirmationCard extends StatelessWidget {
           _Line('Deskripsi', transaction.description),
           _Line('Nominal', formatIDR(transaction.amount)),
           _Line('Tanggal', formatIndonesianDate(transaction.transactionDate)),
+          _Line(
+            'Catatan',
+            transaction.notes?.isNotEmpty == true ? transaction.notes! : '-',
+          ),
           _Line('Sumber', transaction.source.name),
           _Line(
-            'Confidence',
+            'Akurasi',
             '${((transaction.confidenceScore ?? 0) * 100).round()}%',
           ),
+          if ((transaction.confidenceScore ?? 1) < 0.75) ...[
+            const SizedBox(height: 8),
+            const Text(
+              'Haro belum terlalu yakin, cek lagi ya.',
+              style: TextStyle(
+                color: AppColors.expense,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
           const SizedBox(height: 12),
           Row(
             children: [
               Expanded(
                 child: AppButton(
-                  label: 'Simpan',
+                  label: 'Simpan Transaksi',
                   icon: Icons.check,
                   onPressed: () => onSave(transaction),
                 ),
@@ -137,6 +152,9 @@ class _TransactionEditorState extends State<_TransactionEditor> {
   late final _amountController = TextEditingController(
     text: widget.transaction.amount.toString(),
   );
+  late final _notesController = TextEditingController(
+    text: widget.transaction.notes ?? '',
+  );
   late DateTime _date = widget.transaction.transactionDate;
 
   @override
@@ -144,6 +162,7 @@ class _TransactionEditorState extends State<_TransactionEditor> {
     _categoryController.dispose();
     _descriptionController.dispose();
     _amountController.dispose();
+    _notesController.dispose();
     super.dispose();
   }
 
@@ -203,6 +222,8 @@ class _TransactionEditorState extends State<_TransactionEditor> {
             keyboardType: TextInputType.number,
           ),
           const SizedBox(height: 12),
+          AppTextField(controller: _notesController, hint: 'Catatan'),
+          const SizedBox(height: 12),
           ListTile(
             contentPadding: EdgeInsets.zero,
             title: Text(formatIndonesianDate(_date)),
@@ -232,6 +253,7 @@ class _TransactionEditorState extends State<_TransactionEditor> {
                   category: _categoryController.text,
                   description: _descriptionController.text,
                   transactionDate: _date,
+                  notes: _notesController.text,
                 ),
               );
             },

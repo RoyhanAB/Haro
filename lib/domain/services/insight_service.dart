@@ -8,12 +8,14 @@ String generateHaroInsight(
   List<Transaction> transactions,
   DateTime month,
 ) {
-  if (profile == null)
+  if (profile == null) {
     return 'Lengkapi profil dulu supaya Haro bisa bantu jaga dompetmu.';
+  }
   final expense = getMonthlyExpense(transactions, month);
   final budget = profile.monthlyBudget;
-  if (expense == 0)
+  if (expense == 0) {
     return 'Belum ada pengeluaran bulan ini. Mulai catat dari hal kecil seperti kopi atau ojek.';
+  }
   final breakdown = getCategoryBreakdown(transactions, month).entries.toList()
     ..sort((a, b) => b.value.compareTo(a.value));
   final top = breakdown.first;

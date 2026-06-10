@@ -40,31 +40,64 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         child: ListView(
           padding: const EdgeInsets.all(24),
           children: [
-            const Center(child: HaroAvatar(size: 96, mood: HaroMoodVisual.happy)),
+            const Center(
+              child: HaroAvatar(size: 96, mood: HaroMoodVisual.happy),
+            ),
             const SizedBox(height: 16),
-            Text('Buat akun HARO', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900)),
+            Text(
+              'Buat akun HARO',
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900),
+            ),
             const Text('Biar Haro bisa bantu jaga uangmu dari sekarang.'),
             const SizedBox(height: 20),
             AppTextField(controller: _name, hint: 'Nama'),
             const SizedBox(height: 12),
-            AppTextField(controller: _email, hint: 'Email', keyboardType: TextInputType.emailAddress),
+            AppTextField(
+              controller: _email,
+              hint: 'Email',
+              keyboardType: TextInputType.emailAddress,
+            ),
             const SizedBox(height: 12),
             AppTextField(controller: _password, hint: 'Password'),
             const SizedBox(height: 12),
             AppTextField(controller: _confirm, hint: 'Konfirmasi password'),
             Row(
               children: [
-                Checkbox(value: _terms, onChanged: (value) => setState(() => _terms = value ?? false)),
-                const Expanded(child: Text('Aku setuju data tersimpan lokal untuk MVP HARO.')),
+                Checkbox(
+                  value: _terms,
+                  onChanged: (value) => setState(() => _terms = value ?? false),
+                ),
+                const Expanded(
+                  child: Text(
+                    'Aku setuju data tersimpan lokal untuk MVP HARO.',
+                  ),
+                ),
               ],
             ),
-            if (_error != null) Text(_error!, style: const TextStyle(color: Colors.red, fontWeight: FontWeight.w700)),
+            if (_error != null)
+              Text(
+                _error!,
+                style: const TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
             const SizedBox(height: 8),
             AppButton(label: 'Daftar', onPressed: _register),
             const SizedBox(height: 8),
-            AppButton(label: 'Daftar dengan Google', icon: Icons.g_mobiledata, isSecondary: true, onPressed: () {}),
+            AppButton(
+              label: 'Daftar dengan Google',
+              icon: Icons.g_mobiledata,
+              isSecondary: true,
+              onPressed: () {},
+            ),
             TextButton(
-              onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginScreen())),
+              onPressed: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
+              ),
               child: const Text('Sudah punya akun? Masuk'),
             ),
           ],
@@ -74,8 +107,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   }
 
   Future<void> _register() async {
-    if (_name.text.trim().isEmpty || !isValidEmail(_email.text.trim()) || !isStrongEnoughPassword(_password.text)) {
-      setState(() => _error = 'Nama, email, dan password minimal 6 karakter wajib valid.');
+    if (_name.text.trim().isEmpty ||
+        !isValidEmail(_email.text.trim()) ||
+        !isStrongEnoughPassword(_password.text)) {
+      setState(
+        () => _error =
+            'Nama, email, dan password minimal 6 karakter wajib valid.',
+      );
       return;
     }
     if (_password.text != _confirm.text) {
@@ -86,7 +124,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       setState(() => _error = 'Setujui ketentuan dulu, ya.');
       return;
     }
-    await ref.read(appStateProvider.notifier).register(_name.text.trim(), _email.text.trim(), _password.text);
+    await ref
+        .read(appStateProvider.notifier)
+        .register(_name.text.trim(), _email.text.trim(), _password.text);
     if (mounted) Navigator.popUntil(context, (route) => route.isFirst);
   }
 }

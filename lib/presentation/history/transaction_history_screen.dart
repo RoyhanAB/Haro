@@ -143,8 +143,9 @@ class _TransactionHistoryScreenState
         ],
       ),
     );
-    if (confirmed == true)
+    if (confirmed == true) {
       ref.read(appStateProvider.notifier).deleteTransaction(transaction.id);
+    }
   }
 
   Future<void> _edit(Transaction transaction) async {

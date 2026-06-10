@@ -9,7 +9,8 @@ class ForgotPasswordScreen extends ConsumerStatefulWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
-  ConsumerState<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+  ConsumerState<ForgotPasswordScreen> createState() =>
+      _ForgotPasswordScreenState();
 }
 
 class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
@@ -30,14 +31,25 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
         child: ListView(
           padding: const EdgeInsets.all(24),
           children: [
-            Text('Reset password', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900)),
+            Text(
+              'Reset password',
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w900),
+            ),
             const SizedBox(height: 12),
-            AppTextField(controller: _email, hint: 'Email', keyboardType: TextInputType.emailAddress),
+            AppTextField(
+              controller: _email,
+              hint: 'Email',
+              keyboardType: TextInputType.emailAddress,
+            ),
             const SizedBox(height: 16),
             AppButton(
               label: 'Kirim instruksi reset',
               onPressed: () async {
-                await ref.read(appStateProvider.notifier).forgotPassword(_email.text.trim());
+                await ref
+                    .read(appStateProvider.notifier)
+                    .forgotPassword(_email.text.trim());
                 setState(() => _sent = true);
               },
             ),

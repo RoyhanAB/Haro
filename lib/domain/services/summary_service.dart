@@ -47,3 +47,14 @@ Map<String, int> getCategoryBreakdown(
   }
   return result;
 }
+
+int calculateDailySafeSpending(
+  UserProfile profile,
+  List<Transaction> transactions,
+  DateTime month,
+) {
+  final remaining = getMonthlyRemaining(profile, transactions, month);
+  final daysInMonth = DateTime(month.year, month.month + 1, 0).day;
+  final remainingDays = (daysInMonth - month.day + 1).clamp(1, 31);
+  return remaining <= 0 ? 0 : (remaining / remainingDays).floor();
+}

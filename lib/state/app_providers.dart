@@ -4,7 +4,6 @@ import '../data/local/local_storage_service.dart';
 import '../data/repositories/auth_repository.dart';
 import '../data/repositories/profile_repository.dart';
 import '../data/repositories/transaction_repository.dart';
-import '../domain/models/auth_user.dart';
 import '../domain/models/transaction.dart';
 import '../domain/models/user_profile.dart';
 import '../domain/services/transaction_parser_service.dart';
@@ -83,7 +82,8 @@ class AppController extends StateNotifier<AppState> {
     state = state.copyWith(authUser: user);
   }
 
-  Future<void> forgotPassword(String email) => _authRepository.forgotPassword(email);
+  Future<void> forgotPassword(String email) =>
+      _authRepository.forgotPassword(email);
 
   Future<void> logout() async {
     await _authRepository.logout();

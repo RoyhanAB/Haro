@@ -7,7 +7,7 @@ class AppTheme {
     final scheme = ColorScheme.fromSeed(
       seedColor: AppColors.primary,
       brightness: Brightness.light,
-      primary: AppColors.primary,
+      primary: AppColors.deepOrange,
       surface: AppColors.cream,
       onSurface: AppColors.darkBrown,
     );
@@ -39,6 +39,12 @@ class AppTheme {
         indicatorColor: AppColors.highlight,
         labelTextStyle: WidgetStateProperty.all(
           const TextStyle(fontSize: 11, fontWeight: FontWeight.w700),
+        ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: AppColors.deepOrange,
+          foregroundColor: Colors.white,
         ),
       ),
     );

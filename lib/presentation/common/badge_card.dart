@@ -15,7 +15,11 @@ class BadgeCard extends StatelessWidget {
         children: [
           Icon(locked ? Icons.lock_outline : Icons.emoji_events, size: 32),
           const SizedBox(height: 8),
-          Text(title, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w800)),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontWeight: FontWeight.w800),
+          ),
         ],
       ),
     );

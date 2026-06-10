@@ -58,7 +58,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        HaroAvatar(size: 132, accessory: slide.$3),
+                        HaroAvatar(
+                          size: 132,
+                          mood: index == 0
+                              ? HaroMoodVisual.happy
+                              : index == 1
+                              ? HaroMoodVisual.readingReceipt
+                              : HaroMoodVisual.warning,
+                        ),
                         const SizedBox(height: 32),
                         Text(
                           slide.$1,

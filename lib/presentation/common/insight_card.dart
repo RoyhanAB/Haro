@@ -14,7 +14,7 @@ class InsightCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const HaroAvatar(size: 48, accessory: '📊'),
+          const HaroAvatar(size: 48, mood: HaroMoodVisual.thinking),
           const SizedBox(width: 12),
           Expanded(
             child: Text(

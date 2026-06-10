@@ -1,6 +1,6 @@
-import 'package:HARO/domain/models/parsed_transaction_result.dart';
-import 'package:HARO/domain/models/transaction.dart';
-import 'package:HARO/domain/services/transaction_parser_service.dart';
+import 'package:haro/domain/models/parsed_transaction_result.dart';
+import 'package:haro/domain/models/transaction.dart';
+import 'package:haro/domain/services/transaction_parser_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

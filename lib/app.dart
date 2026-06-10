@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/theme/app_theme.dart';
+import 'presentation/auth/welcome_screen.dart';
 import 'presentation/main_shell.dart';
 import 'presentation/onboarding/onboarding_screen.dart';
 import 'presentation/onboarding/setup_profile_screen.dart';
@@ -33,9 +34,11 @@ class _HAROAppState extends ConsumerState<HAROApp> {
         duration: const Duration(milliseconds: 250),
         child: !state.isHydrated
             ? const _SplashScreen()
+            : !state.isLoggedIn
+            ? const WelcomeScreen()
             : !state.hasCompletedOnboarding
             ? const OnboardingScreen()
-            : state.userProfile == null
+            : !state.hasCompletedSetup || state.userProfile == null
             ? const SetupProfileScreen()
             : const MainShell(),
       ),
@@ -60,7 +63,7 @@ class _SplashScreen extends StatelessWidget {
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800),
             ),
             SizedBox(height: 8),
-            Text('Catat uangmu semudah ngobrol.'),
+            Text('Haro lagi nyiapin dompetmu...'),
           ],
         ),
       ),

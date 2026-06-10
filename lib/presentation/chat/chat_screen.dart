@@ -44,7 +44,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       appBar: AppBar(
         title: const Row(
           children: [
-            HaroAvatar(size: 40, accessory: '💬'),
+            HaroAvatar(size: 40, mood: HaroMoodVisual.happy),
             SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
